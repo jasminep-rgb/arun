@@ -145,7 +145,7 @@
     <div class="characters">
       <img src="couple_characters2.png" alt="Couple characters no background" />
     </div>
-    <h2>I am sorry 😢</h2>
+    <h2>I am sorry🙇🏻‍♀️😢</h2>
     <button class="nav right" onclick="goNext()">&rarr;</button>
   </div>
 
@@ -160,10 +160,10 @@
   <!-- Page 4 (forgiveness options) -->
   <div id="page4" class="container">
     <button class="nav" onclick="goPrev()">&larr;</button>
-    <h2>Do you forgive me?</h2>
-    <button class="forgiveness-button" onclick="forgivenessSelected(this)">I forgive you</button>
+    <h2>Do you forgive me🥹?</h2>
+    <button class="forgiveness-button" onclick="forgivenessSelected(this, false)">I forgive you </button>
     <button class="forgiveness-button" onclick="forgivenessSelected(this, true)">No</button>
-    <button class="forgiveness-button" onclick="forgivenessSelected(this, true)">I am still angry</button>
+    <button class="forgiveness-button" onclick="forgivenessSelected(this, true)">I am still angry 🙂‍↔️</button>
     <button class="nav right" onclick="goNext()"> &rarr; </button>
   </div>
 
@@ -173,10 +173,10 @@
     <div class="characters">
       <img src="couple_characters3.png" alt="Couple characters" />
     </div>
-    <h2>I love you more than anything my love♥️🎀</h2>
+    <h2>I love you more than anything my lovely hubby♥️🎀</h2>
   </div>
 
-  <!-- Page 6 (redirect for No or Angry) -->
+  <!-- Page 6 (only if No or Angry) -->
   <div id="page6" class="container">
     <button class="nav" onclick="goPrevFromPage6()">&larr;</button>
     <h2>You chose not to forgive...</h2>
@@ -201,10 +201,13 @@
   }
 
   function goPrev() {
-    if (currentPage > 0) showPage(currentPage - 1);
+    if (currentPage === pages.indexOf('page5')) {
+      showPage(pages.indexOf('page4'));
+    } else if (currentPage > 0) {
+      showPage(currentPage - 1);
+    }
   }
 
-  // New goPrev function specifically for page 6 to redirect to page4
   function goPrevFromPage6() {
     showPage(pages.indexOf('page4'));
   }
@@ -214,10 +217,10 @@ I am sorry for not treating you the best sometimes, I really does love you and a
 
 My precious boy, watching you smile has never once failed to make me smile, because you are my joy, my happiness and my peace. As a little girl, I always wondered who I was going to marry and start my own family with one day. Even with my wildest imagination I never thought someone like you existed. If there was such thing as perfection then that would most definitely be you my sweet little pookie. I am so proud of you and I know you will shine so brightly as we live the rest of our lives together.
 
-Please love me more.  
-I am sorry for the pain I caused you.  
+Please love me more😽.  
+I am sorry for the pain I caused you🙇🏻‍♀️ .  
 
-I Love you, Always & Forever ❤️`;
+I Love you, Always & Forever♥️`;
 
   let typedIndex = 0;
   let typingTimer;
@@ -232,7 +235,7 @@ I Love you, Always & Forever ❤️`;
       if (typedIndex < messageText.length) {
         textBox.textContent += messageText.charAt(typedIndex);
         typedIndex++;
-        typingTimer = setTimeout(typeStep, 40);
+        typingTimer = setTimeout(typeStep, 25);
       } else {
         nextBtn.disabled = false;
       }
@@ -240,14 +243,14 @@ I Love you, Always & Forever ❤️`;
     typeStep();
   }
 
-  function forgivenessSelected(btn, redirectOther = false) {
+  function forgivenessSelected(btn, redirectOther) {
     document.querySelectorAll('.forgiveness-button').forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
-    if(!redirectOther) {
-      launchConfetti();
-      setTimeout(() => goNext(), 1200);
-    } else {
+    if(redirectOther) {
       setTimeout(() => showPage(pages.indexOf('page6')), 1200);
+    } else {
+      launchConfetti();
+      setTimeout(() => showPage(pages.indexOf('page5')), 1200);
     }
   }
 
