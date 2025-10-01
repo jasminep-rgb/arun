@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Dear Kuku</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Courier New', Courier, monospace;
+      background: #fff3f6;
+      color: #392031;
+    }
+    .container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      transition: opacity 0.8s ease;
+      padding: 20px;
+      text-align: center;
+      opacity: 0;
+      position: relative;
+    }
+    .container.visible {
+      display: flex;
+      opacity: 1;
+    }
+    .characters img {
+      max-width: 240px;
+      border-radius: 10px;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+      margin-bottom: 20px;
+      background: transparent;
+      filter: drop-shadow(0 0 8px rgba(0,0,0,0.15));
+    }
+    h1, h2 {
+      margin: 10px 0 18px 0;
+      letter-spacing: 1.2px;
+    }
+    button, .nav {
+      margin: 8px;
+      padding: 10px 24px;
+      border: none;
+      border-radius: 8px;
+      background: #e5707e;
+      color: white;
+      font-size: 19px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+      user-select: none;
+      outline: none;
+      text-decoration: none;
+      box-shadow: 0 3px 8px rgba(229, 112, 130, 0.6);
+    }
+    button.forgiveness-button.disabled, button.forgiveness-button[disabled] {
+      background: #ccc !important;
+      cursor: not-allowed;
+      box-shadow: none;
+      color: #666;
+      transform: none;
+    }
+    .nav {
+      position: absolute;
+      top: 30px;
+      background: #f8bbd0da;
+      color: #833442;
+      left: 30px;
+      font-size: 26px;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      box-shadow: 0 2px 6px #e9b2ce60;
+      z-index: 10;
+    }
+    .nav.right {
+      left: auto;
+      right: 30px;
+    }
+    .nav:hover, button:hover:not(.disabled):not([disabled]) {
+      background: #a43b4c;
+      color: #fff;
+      transform: scale(1.08);
+      box-shadow: 0 4px 12px rgba(164, 59, 76, 0.8);
+    }
+    .message {
+      margin: 22px 0;
+      max-width: 420px;
+      line-height: 1.8;
+      white-space: pre-line;
+      text-align: center;
+      font-size: 18px;
+      min-height: 260px;
+      padding: 0 10px;
+      font-family: 'Georgia', serif;
+      color: #4a2c3e;
+      background: #ffe9ec;
+      border-radius: 12px;
+      box-shadow: inset 0 0 10px #f5b9c4;
+    }
+    .forgiveness-button.selected {
+      background: #5cb85c !important;
+      transform: scale(1.1);
+      box-shadow: 0 0 12px #5cb85c;
+    }
+    #confetti {
+      pointer-events: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      overflow: visible; z-index: 9999;
+    }
+    .forgiveness-button {
+      width: 180px;
+      font-size: 17px;
+    }
+    @media (max-width: 480px) {
+      .characters img { max-width: 96%; margin-bottom: 16px; }
+      .message { font-size: 16px; padding: 0 6px; min-height: 220px; }
+      h1, h2 { font-size: 21px; }
+      .nav { top: 12px; left: 12px; right: 12px; font-size: 21px; width: 38px; height: 38px;}
+      button, .nav { padding: 8px 18px; font-size: 16px; }
+      .forgiveness-button { width: 90%; font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="confetti"></div>
+
+  <!-- Page 1 -->
+  <div id="page1" class="container visible">
+    <div class="characters">
+      <img src="couple_characters.png" alt="Couple characters" />
+    </div>
+    <h1>My dear Kuku♥️👶🏻</h1>
+    <button onclick="goNext()">Next</button>
+  </div>
+
+  <!-- Page 2 -->
+  <div id="page2" class="container">
+    <button class="nav" onclick="goPrev()">&larr;</button>
+    <div class="characters">
+      <img src="couple_characters2.png" alt="Couple characters no background" />
+    </div>
+    <h2>I am sorry 😢</h2>
+    <button class="nav right" onclick="goNext()">&rarr;</button>
+  </div>
+
+  <!-- Page 3 (no image) -->
+  <div id="page3" class="container">
+    <button class="nav" onclick="goPrev()">&larr;</button>
+    <div class="message" id="typedMessage"></div>
+    <button id="page3NextBtn" onclick="goNext()" disabled>Next</button>
+    <button class="nav right" style="visibility: hidden;">&rarr;</button>
+  </div>
+
+  <!-- Page 4 (forgiveness options) -->
+  <div id="page4" class="container">
+    <button class="nav" onclick="goPrev()">&larr;</button>
+    <h2>Do you forgive me?</h2>
+    <button class="forgiveness-button" onclick="forgivenessSelected(this)">I forgive you</button>
+    <button class="forgiveness-button" onclick="forgivenessSelected(this, true)">No</button>
+    <button class="forgiveness-button" onclick="forgivenessSelected(this, true)">I am still angry</button>
+    <button class="nav right" onclick="goNext()"> &rarr; </button>
+  </div>
+
+  <!-- Page 5 (last page) -->
+  <div id="page5" class="container">
+    <button class="nav" onclick="goPrev()">&larr;</button>
+    <div class="characters">
+      <img src="couple_characters3.png" alt="Couple characters" />
+    </div>
+    <h2>I love you more than anything my love♥️🎀</h2>
+  </div>
+
+  <!-- Page 6 (redirect for No or Angry) -->
+  <div id="page6" class="container">
+    <button class="nav" onclick="goPrevFromPage6()">&larr;</button>
+    <h2>You chose not to forgive...</h2>
+    <p>But I forgive you and let's move forward ❤️</p>
+    <button onclick="goNext()">Continue</button>
+  </div>
+
+<script>
+  const pages = ['page1', 'page2', 'page3', 'page4', 'page6', 'page5'];
+  let currentPage = 0;
+
+  function showPage(idx) {
+    document.querySelectorAll('.container').forEach(c => c.classList.remove('visible'));
+    document.getElementById('confetti').innerHTML = "";
+    document.getElementById(pages[idx]).classList.add('visible');
+    currentPage = idx;
+    if(currentPage === 2) typeMessage();
+  }
+
+  function goNext() {
+    if (currentPage < pages.length - 1) showPage(currentPage + 1);
+  }
+
+  function goPrev() {
+    if (currentPage > 0) showPage(currentPage - 1);
+  }
+
+  // New goPrev function specifically for page 6 to redirect to page4
+  function goPrevFromPage6() {
+    showPage(pages.indexOf('page4'));
+  }
+
+  const messageText = `I am sorry for being the way I’m sometimes, I am sorry for all the overthinking.
+I am sorry for not treating you the best sometimes, I really does love you and appreciates everything you do, I will continue working on being better for you, you are such a blessing in my life.
+
+My precious boy, watching you smile has never once failed to make me smile, because you are my joy, my happiness and my peace. As a little girl, I always wondered who I was going to marry and start my own family with one day. Even with my wildest imagination I never thought someone like you existed. If there was such thing as perfection then that would most definitely be you my sweet little pookie. I am so proud of you and I know you will shine so brightly as we live the rest of our lives together.
+
+Please love me more.  
+I am sorry for the pain I caused you.  
+
+I Love you, Always & Forever ❤️`;
+
+  let typedIndex = 0;
+  let typingTimer;
+  function typeMessage() {
+    const textBox = document.getElementById('typedMessage');
+    const nextBtn = document.getElementById('page3NextBtn');
+    textBox.textContent = '';
+    typedIndex = 0;
+    nextBtn.disabled = true;
+
+    function typeStep() {
+      if (typedIndex < messageText.length) {
+        textBox.textContent += messageText.charAt(typedIndex);
+        typedIndex++;
+        typingTimer = setTimeout(typeStep, 40);
+      } else {
+        nextBtn.disabled = false;
+      }
+    }
+    typeStep();
+  }
+
+  function forgivenessSelected(btn, redirectOther = false) {
+    document.querySelectorAll('.forgiveness-button').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    if(!redirectOther) {
+      launchConfetti();
+      setTimeout(() => goNext(), 1200);
+    } else {
+      setTimeout(() => showPage(pages.indexOf('page6')), 1200);
+    }
+  }
+
+  function launchConfetti() {
+    const confettiContainer = document.getElementById('confetti');
+    for (let i = 0; i < 100; i++) {
+      const dot = document.createElement('div');
+      dot.style.position = 'fixed';
+      dot.style.width = '8px';
+      dot.style.height = '8px';
+      dot.style.backgroundColor = randomColor();
+      dot.style.borderRadius = '50%';
+      dot.style.left = Math.random() * window.innerWidth + 'px';
+      dot.style.top = '-10px';
+      dot.style.opacity = '1';
+      dot.style.zIndex = '9999';
+      dot.style.pointerEvents = 'none';
+      dot.style.transition = 'transform 2s ease, opacity 2s ease';
+      confettiContainer.appendChild(dot);
+      setTimeout(() => {
+        dot.style.transform = `translateY(${window.innerHeight + 40}px) rotate(${Math.random()*360}deg)`;
+        dot.style.opacity = '0';
+      }, 10);
+      setTimeout(() => confettiContainer.removeChild(dot), 2100);
+    }
+  }
+
+  function randomColor() {
+    const colors = ['#E57373', '#F06292', '#BA68C8', '#9575CD', '#7986CB', '#64B5F6', '#4DB6AC', '#81C784', '#AED581', '#DCE775', '#FFF176', '#FFD54F', '#FFB74D'];
+    return colors[Math.floor(Math.random()*colors.length)];
+  }
+
+  window.onload = () => showPage(0);
+</script>
+</body>
+</html>
